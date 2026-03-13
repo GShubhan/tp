@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+
 
 class DukeTest {
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -32,6 +35,10 @@ class DukeTest {
         // Capture and verify the output
         String expectedOutput = Duke.LOGO + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
+    }
+    @Test
+    public void logo_isNotEmpty() {
+        assertFalse(Duke.LOGO.isEmpty());
     }
 }
 //@@author
