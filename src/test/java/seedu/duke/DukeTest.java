@@ -1,20 +1,18 @@
 package seedu.duke;
 
 import org.junit.jupiter.api.Test;
-//@@author shrabasti-c-reused
-//Reused from https://www.geeksforgeeks.org/advance-java/unit-testing-of-system-out-println-with-junit/
-// with minor modifications
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DukeTest {
+    //@@author shrabasti-c-reused
+    //Reused from https://www.geeksforgeeks.org/advance-java/unit-testing-of-system-out-println-with-junit/
+    // with minor modifications
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
@@ -37,6 +35,8 @@ class DukeTest {
         String expectedOutput = Duke.LOGO + System.lineSeparator();
         assertEquals(expectedOutput, outputStream.toString());
     }
+    //@@author
+
     @Test
     public void logo_isNotEmpty() {
         assertFalse(Duke.LOGO.isEmpty());
@@ -49,6 +49,5 @@ class DukeTest {
         String expectedOutput="Welcome to ClausControl, Santa!";
         assertTrue(output.contains(expectedOutput));
     }
-
 }
-//@@author
+
