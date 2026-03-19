@@ -9,10 +9,13 @@ public class ElfListCommand extends Command {
     
     @Override
     public String execute() {
+        
+        assert elfList != null : "The elfList must be initialized before execution!";
+        
         logger.log(Level.INFO, "Executing ElfListCommand...");
         
-        if (elfList == null || elfList.isEmpty()) {
-            logger.log(Level.WARNING, "Elf list is null or empty. Returning empty message.");
+        if (elfList.isEmpty()) {
+            logger.log(Level.WARNING, "Elf list is empty. Returning empty message.");
             return "The elf list is empty!";
         }
         
@@ -20,10 +23,11 @@ public class ElfListCommand extends Command {
         
         StringBuilder sb = new StringBuilder("Here are all elf:\n");
         for (int i = 0; i < elfList.size(); i++) {
+            assert elfList.get(i) != null : "Elf at index " + i + " should not be null";
             sb.append((i + 1)).append(". ").append(elfList.get(i).toString()).append("\n");
         }
         
         return sb.toString().trim();
     }
 }
-//@@author Kiri
+//@@author

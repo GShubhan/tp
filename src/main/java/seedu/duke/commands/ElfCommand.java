@@ -17,12 +17,20 @@ public class ElfCommand extends Command {
     public ElfCommand(String name) throws IllegalValueException {
         logger.log(Level.FINE, "Creating ElfCommand for: " + name);
         this.toAdd = new Elf(new Name(name));
+        
+        assert toAdd != null : "Elf object should be successfully created in constructor";
     }
     
     @Override
     public String execute() {
+ 
+        assert elfList != null : "elfList must be initialized before executing ElfCommand";
+        assert toAdd != null : "toAdd should not be null when executing add operation";
+        
         logger.log(Level.INFO, "Adding a new elf to the list: " + toAdd.getName());
+        
         elfList.add(toAdd);
+        
         logger.log(Level.INFO, "Elf added successfully.");
         return String.format(MESSAGE_SUCCESS, toAdd);
     }

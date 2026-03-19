@@ -9,21 +9,26 @@ public class ChildListCommand extends Command {
     
     @Override
     public String execute() {
+
+        assert childList != null : "childList should be initialized before execution";
+        
         logger.log(Level.INFO, "Executing ChildListCommand...");
         
-        if (childList == null || childList.isEmpty()) {
-            logger.log(Level.WARNING, "Child list is null or empty.");
+        if (childList.isEmpty()) {
+            logger.log(Level.WARNING, "Child list is empty.");
             return "The child list is empty!";
         }
         
         logger.log(Level.INFO, "Displaying " + childList.size() + " children.");
         
         StringBuilder sb = new StringBuilder("Here are all children:\n");
+        
         for (int i = 0; i < childList.size(); i++) {
+            assert childList.get(i) != null : "Child object at index " + i + " should not be null";
             sb.append((i + 1)).append(". ").append(childList.get(i)).append("\n");
         }
         
         return sb.toString().trim();
     }
 }
-//@@author Kiri
+//@@author
