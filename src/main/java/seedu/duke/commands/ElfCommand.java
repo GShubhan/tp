@@ -22,11 +22,8 @@ public class ElfCommand extends Command {
     @Override
     public String execute() {
         logger.log(Level.INFO, "Adding a new elf to the list: " + toAdd.getName());
-        
         elfList.add(toAdd);
-        
         logger.log(Level.INFO, "Elf added successfully.");
-        
         return String.format(MESSAGE_SUCCESS, toAdd);
     }
 }
