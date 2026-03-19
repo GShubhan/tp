@@ -9,13 +9,9 @@ public class ElfTask {
         this.task = task;
     }
     
-    public String getTask() {
-        return task;
+    @Override
+    public String toString() {
+        return this.task;
     }
-    
-    public void editTask(String newtask) {
-        this.task = newtask;
-    }
-    
 }
 //@@author

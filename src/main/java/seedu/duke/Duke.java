@@ -76,6 +76,7 @@ public class Duke {
      * Main entry-point for the ClausControl application.
      */
     public static void main(String[] args) throws IllegalValueException {
+        Logger.getLogger("seedu.duke").setLevel(Level.WARNING);
         new Duke().run();
     }
 }
