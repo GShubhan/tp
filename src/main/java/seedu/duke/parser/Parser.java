@@ -10,6 +10,7 @@ import seedu.duke.commands.DeGiftCommand;
 import seedu.duke.commands.DeleteCommand;
 import seedu.duke.commands.DeliverGiftCommand;
 import seedu.duke.commands.EditCommand;
+import seedu.duke.commands.ElfCommand;
 import seedu.duke.commands.ElfListCommand;
 import seedu.duke.commands.FindCommand;
 import seedu.duke.commands.GiftCommand;
@@ -17,6 +18,7 @@ import seedu.duke.commands.GiftListCommand;
 import seedu.duke.commands.NaughtyCommand;
 import seedu.duke.commands.NiceCommand;
 import seedu.duke.commands.ReassignCommand;
+import seedu.duke.commands.TaskCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
 
@@ -41,18 +43,27 @@ public class Parser {
 
         case "delete":
             return prepareDelete(arguments);
-
+        
+        //@@author Kiri
         case "childlist":
             return new ChildListCommand();
 
         case "elflist":
             return new ElfListCommand();
-
+        
         case "find":
-            return new FindCommand(arguments);
-
+            return prepareFind(arguments);
+        
+        case "elf":
+            return prepareElf(arguments);
+        
+        case "task":
+            return prepareTaskAction(arguments);
+        //@@author
+        
         case "action":
             return prepareAction(arguments);
+            
         //@@author
 
         //@@author GShubhan
@@ -222,5 +233,75 @@ public class Parser {
 
 
     }
+    
+    // @@author Kiri
+    private Command prepareFind(String args) throws IllegalValueException {
+        String name = null;
+        String[] tokens = args.split(" ");
+        
+        for (String token : tokens) {
+            if (token.startsWith("n/")) {
+                name = token.substring(2).trim();
+                break;
+            }
+        }
+        
+        if (name == null || name.isEmpty()) {
+            throw new IllegalValueException("Format: find n/NAME");
+        }
+        
+        return new FindCommand(name);
+    }
+    
+    private Command prepareElf(String args) throws IllegalValueException {
+        String name = null;
+        
+        String[] tokens = args.split(" ");
+        
+        for (String token : tokens) {
+            if (token.startsWith("n/")) {
+                name = token.substring(2);
+            }
+        }
+        
+        if (name == null || name.isEmpty()) {
+            throw new IllegalValueException("Format: elf n/NAME");
+        }
+        
+        return new ElfCommand(name);
+    }
+    
+    private Command prepareTaskAction(String args) throws IllegalValueException {
+        try {
+            String trimmedArgs = args.trim();
+            
+            int tIndex = trimmedArgs.indexOf("t/");
+            
+            if (tIndex == -1) {
+                throw new IllegalValueException("Invalid format! Format: task ELF_INDEX t/TASK_DESCRIPTION");
+            }
+            
+            String indexPart = trimmedArgs.substring(0, tIndex).trim();
+            if (indexPart.isEmpty()) {
+                throw new IllegalValueException("Please provide an Elf index." +
+                        " Format: task ELF_INDEX t/TASK_DESCRIPTION");
+            }
+            
+            int elfIndex = Integer.parseInt(indexPart);
+            
+            String taskDescription = trimmedArgs.substring(tIndex + 2).trim();
+            if (taskDescription.isEmpty()) {
+                throw new IllegalValueException("Task description cannot be empty!");
+            }
+            
+            return new TaskCommand(elfIndex, taskDescription);
+            
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("The Elf index must be a valid integer.");
+        } catch (Exception e) {
+            throw new IllegalValueException("Format: task ELF_INDEX t/TASK_DESCRIPTION");
+        }
+    }
+    // @@author
 }
 

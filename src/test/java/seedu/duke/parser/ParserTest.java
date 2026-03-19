@@ -1,10 +1,10 @@
 package seedu.duke.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 import org.junit.jupiter.api.Test;
-
+import seedu.duke.commands.ElfCommand;
+import seedu.duke.commands.FindCommand;
+import seedu.duke.commands.Command;
 import seedu.duke.data.exception.IllegalValueException;
 
 //generated using ChatGPT
@@ -29,4 +29,21 @@ public class ParserTest {
             }
         }
     }
+    
+    //@@author Kiri
+    @Test
+    public void parse_elfCommand_parsedCorrectly() throws Exception {
+        String input = "elf n/Dobby";
+        Command command = parser.parseCommand(input);
+        // Assert that the command matches the expected ElfCommand
+        assert command instanceof ElfCommand : "Should be an instance of ElfCommand";
+    }
+    
+    @Test
+    public void parse_findCommand_parsedCorrectly() throws Exception {
+        String input = "find n/Alice";
+        Command command = parser.parseCommand(input);
+        assert command instanceof FindCommand : "Should be an instance of FindCommand";
+    }
+    //@@author
 }
