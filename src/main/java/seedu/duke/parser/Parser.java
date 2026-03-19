@@ -18,6 +18,7 @@ import seedu.duke.commands.GiftListCommand;
 import seedu.duke.commands.NaughtyCommand;
 import seedu.duke.commands.NiceCommand;
 import seedu.duke.commands.ReassignCommand;
+import seedu.duke.commands.TaskCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
 
@@ -57,6 +58,9 @@ public class Parser {
         
         case "elf":
             return PrepareElf(arguments);
+        
+        case "task":
+            return prepareTaskAction(arguments);
         //@@author
         
         case "action":
@@ -232,6 +236,7 @@ public class Parser {
 
     }
     
+    // @@author Kiri
     private Command PrepareElf(String args) throws IllegalValueException {
         String name = null;
         
@@ -249,5 +254,37 @@ public class Parser {
         
         return new ElfCommand(name);
     }
+    
+    private Command prepareTaskAction(String args) throws IllegalValueException {
+        try {
+            String trimmedArgs = args.trim();
+            
+            int tIndex = trimmedArgs.indexOf("t/");
+            
+            if (tIndex == -1) {
+                throw new IllegalValueException("Invalid format! Format: task ELF_INDEX t/TASK_DESCRIPTION");
+            }
+            
+            String indexPart = trimmedArgs.substring(0, tIndex).trim();
+            if (indexPart.isEmpty()) {
+                throw new IllegalValueException("Please provide an Elf index. Format: task ELF_INDEX t/TASK_DESCRIPTION");
+            }
+            
+            int elfIndex = Integer.parseInt(indexPart);
+            
+            String taskDescription = trimmedArgs.substring(tIndex + 2).trim();
+            if (taskDescription.isEmpty()) {
+                throw new IllegalValueException("Task description cannot be empty!");
+            }
+            
+            return new TaskCommand(elfIndex, taskDescription);
+            
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("The Elf index must be a valid integer.");
+        } catch (Exception e) {
+            throw new IllegalValueException("Format: task ELF_INDEX t/TASK_DESCRIPTION");
+        }
+    }
+    // @@author
 }
 
