@@ -68,8 +68,8 @@ public class Parser {
             String list = arguments.split(" ")[1].substring(2);
             return new ReassignCommand(index, list);
         //@@author
-            
 
+        //@@author prerana-r11
         case "gift":
             return prepareGiftAction(arguments);
         case "degift":
@@ -78,6 +78,8 @@ public class Parser {
             return prepareDeliverAction(arguments);
         case "giftlist":
             return new GiftListCommand();
+        //@@author
+
 
         default:
             throw new IllegalValueException(
@@ -164,7 +166,7 @@ public class Parser {
             throw new IllegalValueException("Format: action CHILD_INDEX a/ACTION s/SEVERITY");
         }
     }
-
+    //@@author prerana-r11
     private GiftCommand prepareGiftAction(String args) throws IllegalValueException {
         try {
             String[] parts=args.trim().split(" ");
@@ -222,5 +224,7 @@ public class Parser {
 
 
     }
+    //@@author
+
 }
 
