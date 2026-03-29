@@ -80,6 +80,7 @@ public class Duke {
                 try {
                     storage.save(childList);
                 } catch (IOException e) {
+                    logger.warning("Error saving: " + e.getMessage());
                 }
                 if (command instanceof FinalizeCommand) {
                     isFinalized = true;
