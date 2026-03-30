@@ -49,5 +49,11 @@ public class Elf implements ReadOnlyElf {
         return name;
     }
     
+    @Override
+    public void setName(Name name) {
+        assert name != null : "New name cannot be null";
+        this.name = name;
+    }
+    
 }
 //@@author

@@ -45,6 +45,12 @@ public class Parser {
             
         case "detask":
             return prepareDetask(arguments);
+            
+        case "editelf":
+            return prepareEditElf(arguments);
+        
+        case "rmelf":
+            return prepareRmElf(arguments);
         //@@author
         
         case "action":
@@ -334,6 +340,64 @@ public class Parser {
             throw new IllegalValueException("Indexes must be valid integers.");
         } catch (Exception e) {
             throw new IllegalValueException("Correct format: detask e/ELF_INDEX t/TASK_INDEX");
+        }
+    }
+    
+    private Command prepareEditElf(String args) throws IllegalValueException {
+        String trimmedArgs = args.trim();
+        int ePos = trimmedArgs.indexOf("e/");
+        int nPos = trimmedArgs.indexOf("n/");
+        
+        if (ePos == -1 || nPos == -1) {
+            throw new IllegalValueException("Invalid format! Expected: editelf e/ELF_INDEX n/NEW_NAME");
+        }
+        
+        try {
+            String elfPart;
+            String namePart;
+            
+            if (ePos < nPos) {
+                elfPart = trimmedArgs.substring(ePos + 2, nPos).trim();
+                namePart = trimmedArgs.substring(nPos + 2).trim();
+            } else {
+                namePart = trimmedArgs.substring(nPos + 2, ePos).trim();
+                elfPart = trimmedArgs.substring(ePos + 2).trim();
+            }
+            
+            if (elfPart.isEmpty()) {
+                throw new IllegalValueException("Elf index cannot be empty! Format: e/INDEX");
+            }
+            if (namePart.isEmpty()) {
+                throw new IllegalValueException("New name cannot be empty! Format: n/NAME");
+            }
+            
+            int elfIndex = Integer.parseInt(elfPart);
+            return new EditElfCommand(elfIndex, namePart);
+            
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("The Elf index must be a valid integer.");
+        }
+    }
+    
+    private Command prepareRmElf(String args) throws IllegalValueException {
+        String trimmedArgs = args.trim();
+        int ePos = trimmedArgs.indexOf("e/");
+        
+        if (ePos == -1) {
+            throw new IllegalValueException("Invalid format! Expected: rmelf e/ELF_INDEX");
+        }
+        
+        try {
+            String indexPart = trimmedArgs.substring(ePos + 2).trim();
+            if (indexPart.isEmpty()) {
+                throw new IllegalValueException("Please provide an Elf index after 'e/'.");
+            }
+            
+            int elfIndex = Integer.parseInt(indexPart);
+            return new RmElfCommand(elfIndex);
+            
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("The Elf index must be a valid integer.");
         }
     }
     // @@author
