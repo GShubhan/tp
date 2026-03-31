@@ -38,7 +38,7 @@ Given below is an example usage scenario and how the add child mechanism behaves
 6. The successful message is displayed.
 
 Given below is a sequence diagram describing the child operation (happy path).
-![](docs/team/ChildSequenceDiagram.png)
+![](diagrams/ChildSequenceDiagram.png)
 Step 1. The user launches the application for the first time.
 Step 2. The user executes child n/Bruce Wayne to add a child in the child list.
 
