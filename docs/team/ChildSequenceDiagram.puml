@@ -1,0 +1,50 @@
+@startuml
+
+participant Parser #E9F6EF
+participant ChildCommand #E9F6EF
+participant childList #E9F6EF
+participant Name #E9F6EF
+participant Child #E9F6EF
+
+->Parser: "child n/Bruce Wayne"
+activate Parser
+
+Parser->Parser: parseCommand("child n/Bruce Wayne")
+activate Parser
+Parser->Parser: prepareAdd(args)
+Parser->ChildCommand: new ChildCommand("Bruce Wayne")
+
+
+activate ChildCommand
+
+ChildCommand->Name: new Name("Bruce Wayne")
+activate Name
+Name->Name: isValidName()
+alt #f1ca9f invalid name
+    Name-->ChildCommand: throwIllegalValueException
+else valid name
+    Name-->ChildCommand: Name object
+end
+deactivate Name
+
+ChildCommand->Child: new Child(name)
+activate Child
+Child-->ChildCommand: Child object (toAdd)
+deactivate Child
+
+ChildCommand->ChildCommand: execute()
+activate ChildCommand
+ChildCommand->childList: add(toAdd)
+activate childList
+childList --> ChildCommand
+deactivate childList
+deactivate ChildCommand
+ChildCommand --> Parser: ChildCommand
+deactivate ChildCommand
+
+deactivate Parser
+ <-- Parser: "Ho ho ho! New child added: Bruce Wayne"
+deactivate Parser
+
+
+@enduml

@@ -28,7 +28,17 @@ The "child" command creates a child entity/profile consisting of its name and lo
 #### Implementation
 The proposed child profile is facilitated by Child Class. 
 It implements ReadOnlyChild with a name fetching mechanism, stored internally with a Name class with a reference to a name String input by the user.
+The child operation must minimally have a name argument i.e. location, etc. are optional.
 Given below is an example usage scenario and how the add child mechanism behaves at each step.
+1. The user launches the application for the first time.
+2. The user executes child n/Bruce Wayne to add a child in the child list.
+3. The Parser parses the command and returns the arguments to a new ChildCommand.
+4. Given a valid Name the Child object is instantiated and returned.
+5. The Child is added to the Child List.
+6. The successful message is displayed.
+
+Given below is a sequence diagram describing the child operation (happy path).
+![](docs/team/ChildSequenceDiagram.png)
 Step 1. The user launches the application for the first time.
 Step 2. The user executes child n/Bruce Wayne to add a child in the child list.
 
