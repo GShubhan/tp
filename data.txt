@@ -2,5 +2,5 @@ CHILD|Bobby
 CHILD|Bob
 CHILD|Bruce
 CHILD|Peter Parker
-CHILD|Nick
-CHILD|dawn
+CHILD|Nick Jonas
+CHILD|doe
