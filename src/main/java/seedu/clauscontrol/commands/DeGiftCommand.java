@@ -24,6 +24,9 @@ public class DeGiftCommand extends Command{
         }
         Gift gift=child.getGifts().get(giftIndex-1);
         try{
+            if (gift.isDelivered()) {
+                return "Cannot remove a delivered gift!";
+            }
             child.getGifts().remove(giftIndex-1);
         } catch (IllegalStateException e){
             return e.getMessage();

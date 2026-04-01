@@ -15,29 +15,27 @@ public class DeliveryStatusCommand extends Command{
     }
 
     @Override
-    public String execute(){
-        if(childIndex<1 || childIndex>childList.size()){
+    public String execute() {
+        if (childIndex < 1 || childIndex > childList.size()) {
             return "Please enter valid index value";
         }
-        Child child=childList.get(childIndex-1);
+        Child child = childList.get(childIndex - 1);
 
-        if(giftIndex<1 || giftIndex>child.getGifts().size()){
+        if (giftIndex < 1 || giftIndex > child.getGifts().size()) {
             return "Please enter valid index value";
         }
 
-        Gift gift=child.getGifts().get(giftIndex-1);
+        Gift gift = child.getGifts().get(giftIndex - 1);
 
-        try{
-            if(delivered){
-                gift.markDelivered();
-            } else {
-                gift.markUndelivered();
-            }
-        } catch(Exception e){
-            return e.getMessage();
+        if (delivered && gift.isDelivered()) {
+            return "Gift is already delivered, try another command!";
         }
-        return "Gift status updated, check giftlist!" + gift;
-
+        if (delivered) {
+            gift.markDelivered();
+        } else {
+            gift.markUndelivered();
+        }
+        return "Gift status updated! " + gift;
     }
 }
 //@@author

@@ -66,7 +66,13 @@ public class Storage {
                 }
 
                 String giftName = parts[1];
-                Gift.State state = Gift.State.valueOf(parts[2]);
+                Gift.State state;
+                try {
+                    state = Gift.State.valueOf(parts[2]);
+                } catch (IllegalArgumentException e) {
+                    logger.warning("Invalid gift state in file: " + parts[2]);
+                    continue;
+                }
 
                 Gift gift = new Gift(giftName);
                 switch (state) {

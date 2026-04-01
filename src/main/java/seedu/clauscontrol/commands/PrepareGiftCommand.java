@@ -14,15 +14,22 @@ public class PrepareGiftCommand extends Command{
     }
 
     @Override
-    public String execute(){
-        Child child=childList.get(childIndex-1);
-        Gift gift=child.getGifts().get(giftIndex-1);
-
-        try{
-            gift.markPrepared();
-        } catch(Exception e){
-            return e.getMessage();
+    public String execute() {
+        if (childIndex < 0 || childIndex > childList.size()) {
+            return "Please enter valid child index";
         }
+        Child child = childList.get(childIndex - 1);
+
+        if (giftIndex < 0 || giftIndex > child.getGifts().size()) {
+            return "Please enter valid gift index";
+        }
+        Gift gift = child.getGifts().get(giftIndex - 1);
+
+
+        if (gift.isDelivered()) {
+            return "Cannot prepare a delivered gift, try another command!";
+        }
+        gift.markPrepared();
         return "Gift marked as prepared!!!" + gift;
     }
 }
