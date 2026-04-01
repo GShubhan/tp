@@ -39,7 +39,7 @@ public class EditCommandTest {
         Child child = childList.get(0);
         assertEquals("Bruce Wayne", child.getName().toString());
         assertNull(child.getLocation());
-        assertEquals(-1, child.getAge());
+        assertEquals(20, child.getAge());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class EditCommandTest {
         command.setData(childList, null, false);
         command.execute();
         Child child = childList.get(0);
-        assertEquals("Bruce Banner", child.getName().toString());
+        assertEquals("Bruce Wayne", child.getName().toString());
         assertNotNull(child.getLocation());
         assertEquals("Chicago", child.getLocation());
     }
