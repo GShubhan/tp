@@ -1,6 +1,8 @@
 //@@author GShubhan
 package seedu.clauscontrol.data.todo;
 
+import seedu.clauscontrol.data.exception.IllegalValueException;
+
 import java.time.LocalDate;
 
 /**
@@ -16,6 +18,15 @@ public class Todo {
     }
 
 
+    //@@author shrabasti-c
+    public void setDeadline(LocalDate deadline) throws IllegalValueException {
+        this.deadline = deadline;
+    }
+
+    public void setDescription(String description) throws IllegalValueException {
+        this.description = description;
+    }
+    //@@author
 
     public String getDescription() {
         return description;
