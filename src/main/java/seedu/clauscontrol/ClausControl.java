@@ -39,22 +39,11 @@ public class ClausControl {
     private ArrayList<Child> childList;
     private final ArrayList<Elf> elfList;
     private final Storage storage= new Storage("data.txt");
-    private boolean isFinalized = false;
-    private static Logger logger = Logger.getLogger("Foo");
 
     //@@author GShubhan
     private boolean isFinalized = false;
     private ArrayList<Todo> todoList = new ArrayList<>();
     //@@author
-
-    private TextUi ui = new TextUi();
-    private final Parser parser = new Parser(todoList);
-    private ArrayList<Child> childList = new ArrayList<>();
-    private ArrayList<Elf> elfList = new ArrayList<>();
-
-    private Storage storage= new Storage("data.txt");
-
-
 
     public ClausControl() {
         this(System.in);
@@ -63,7 +52,7 @@ public class ClausControl {
     //@@author prerana-r11
     public ClausControl(InputStream inputStream) {
         this.ui = new TextUi(inputStream);
-        this.parser = new Parser();
+        this.parser = new Parser(todoList);
         this.elfList = new ArrayList<>();
         try {
             this.childList = new ArrayList<>(storage.load());

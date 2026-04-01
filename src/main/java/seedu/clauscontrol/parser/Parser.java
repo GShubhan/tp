@@ -1,34 +1,11 @@
 package seedu.clauscontrol.parser;
 
-import seedu.clauscontrol.commands.Command;
-import seedu.clauscontrol.commands.DeGiftCommand;
-import seedu.clauscontrol.commands.DeliveryStatusCommand;
-import seedu.clauscontrol.commands.DetaskCommand;
-import seedu.clauscontrol.commands.GiftCommand;
-import seedu.clauscontrol.commands.PrepareGiftCommand;
-import seedu.clauscontrol.commands.ActionCommand;
-import seedu.clauscontrol.commands.ChildCommand;
-import seedu.clauscontrol.commands.ChildListCommand;
-import seedu.clauscontrol.commands.EditCommand;
-import seedu.clauscontrol.commands.EditElfCommand;
-import seedu.clauscontrol.commands.ElfCommand;
-import seedu.clauscontrol.commands.ElfListCommand;
-import seedu.clauscontrol.commands.FinalizeCommand;
-import seedu.clauscontrol.commands.FindCommand;
-import seedu.clauscontrol.commands.GiftListCommand;
-import seedu.clauscontrol.commands.NaughtyCommand;
-import seedu.clauscontrol.commands.NiceCommand;
-import seedu.clauscontrol.commands.ReassignCommand;
-import seedu.clauscontrol.commands.ResetCommand;
-import seedu.clauscontrol.commands.RmElfCommand;
-import seedu.clauscontrol.commands.TaskCommand;
-import seedu.clauscontrol.commands.ViewCommand;
-import seedu.clauscontrol.commands.DeleteCommand;
-import seedu.clauscontrol.commands.AddTodoCommand;
-import seedu.clauscontrol.commands.TodoListCommand;
+import seedu.clauscontrol.commands.*;
 import seedu.clauscontrol.data.todo.Todo;
 
 import seedu.clauscontrol.data.exception.IllegalValueException;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -37,7 +14,6 @@ import java.util.ArrayList;
  */
 public class Parser {
     private static Command pendingCommand = null;
-
     //@@author GShubhan
     private final ArrayList<Todo> todoList;
 
@@ -45,6 +21,7 @@ public class Parser {
         this.todoList = todoList;
     }
     //@@author
+
     public Command parseCommand(String userInput) throws IllegalValueException {
 
         //@@author Aurosky
@@ -77,6 +54,9 @@ public class Parser {
 
         case "edit":
             return prepareEdit(arguments);
+
+        case "edittodo":
+            return prepareEditTodo(arguments);
         //@@author
 
         //@@author Aurosky
@@ -325,6 +305,45 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new IllegalValueException("Please use valid command format : delete [childindex]");
         }
+    }
+
+    /**
+     * Prepares an "EditTodo" command from user input arguments.
+     * Parses the index of the task to edit and the new values for description and deadline.
+     *
+     * @param args the input arguments
+     * @return an {@link EditTodoCommand} initialized with the parsed index and new values.
+     * @throws IllegalValueException if input format is invalid, index is missing, or values are invalid
+     */
+    private Command prepareEditTodo(String args) throws IllegalValueException {
+        String newDescription = null;
+        LocalDate newDeadline = null;
+        int index;
+
+        String[] parts = args.trim().split(" ", 2);
+        try {
+            index = Integer.parseInt(parts[0]) - 1;
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("First argument must be the todo task index");
+        }
+
+        if (parts.length < 2) {
+            throw new IllegalValueException("Nothing to edit! Provide d/ or by/");
+        }
+        String remaining = parts[1];
+
+        String[] tokens = remaining.split("(?=\\b(d/|by/))");
+
+        for (String token : tokens) {
+            if (token.startsWith("d/")) {
+                newDescription = token.substring(2).trim();
+            } else if (token.startsWith("/by")) {
+                String newDeadlineString = token.substring(3).trim();
+                newDeadline = LocalDate.parse(newDeadlineString);
+            }
+        }
+
+        return new EditTodoCommand(todoList, index, newDescription, newDeadline);
     }
     //@@author
 

@@ -26,9 +26,17 @@ public class EditCommand extends Command {
         Child child = childList.get(childIndex);
 
         try {
-            child.setName(newName);
-            child.setLocation(newLocation);
-            child.setAge(newAge);
+            if (newName != null) {
+                child.setName(newName);
+            }
+
+            if (newLocation != null) {
+                child.setLocation(newLocation);
+            }
+
+            if (newAge != -1) {
+                child.setAge(newAge);
+            }
         } catch (IllegalValueException e) {
             throw new RuntimeException(e);
         }
