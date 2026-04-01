@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 //@@author shrabasti-c
+/**
+ * Edits a task in the todolist.
+ */
 public class EditTodoCommand extends Command {
     private final ArrayList<Todo> todoList;
     private final int index;

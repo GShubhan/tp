@@ -4,6 +4,9 @@ import seedu.clauscontrol.data.child.Child;
 import seedu.clauscontrol.data.exception.IllegalValueException;
 
 //@@author shrabasti-c
+/**
+ * Edits a child in the child list.
+ */
 public class EditCommand extends Command {
     private final int childIndex;
     private final String newName;
