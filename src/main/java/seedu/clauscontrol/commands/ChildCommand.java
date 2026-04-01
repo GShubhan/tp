@@ -14,10 +14,6 @@ public class ChildCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Ho ho ho! New child added: %1$s";
     private final Child toAdd;
 
-    public Child getChild() {
-        return toAdd;
-    }
-
     /**
      * Convenience constructor using raw values.
      *
@@ -26,6 +22,10 @@ public class ChildCommand extends Command {
     public ChildCommand(String name, String location, int age) throws IllegalValueException {
         this.toAdd = new Child(new Name(name), age, location);
         assert toAdd != null : "Child should not be null";
+    }
+
+    public Child getChild() {
+        return toAdd;
     }
 
     @Override

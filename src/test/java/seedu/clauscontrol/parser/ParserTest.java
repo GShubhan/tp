@@ -8,7 +8,10 @@ import seedu.clauscontrol.commands.Command;
 import seedu.clauscontrol.data.child.Child;
 import seedu.clauscontrol.data.exception.IllegalValueException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class ParserTest {
     private Parser parser = new Parser();
@@ -104,7 +107,7 @@ public class ParserTest {
     }
 
     @Test
-    public void childCommand_NoLocation_valid() throws Exception {
+    public void childCommand_noLocation_valid() throws Exception {
         String input = "child n/Peter Parker a/16 ";
         Child child = ((ChildCommand) parser.parseCommand(input)).getChild();
         assertEquals("Peter Parker", child.getName().toString());
@@ -113,7 +116,7 @@ public class ParserTest {
     }
 
     @Test
-    public void childCommand_NoAge_valid() throws Exception {
+    public void childCommand_noAge_valid() throws Exception {
         String input = "child n/Peter Parker l/NYC ";
         Child child = ((ChildCommand) parser.parseCommand(input)).getChild();
         assertEquals("Peter Parker", child.getName().toString());
@@ -122,7 +125,7 @@ public class ParserTest {
     }
 
     @Test
-    public void childCommand_OnlyName_valid() throws Exception {
+    public void childCommand_onlyName_valid() throws Exception {
         String input = "child n/Clark Kent ";
         Child child = ((ChildCommand) parser.parseCommand(input)).getChild();
         assertEquals("Clark Kent", child.getName().toString());
