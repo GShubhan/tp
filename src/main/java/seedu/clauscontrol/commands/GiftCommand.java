@@ -22,7 +22,7 @@ public class GiftCommand extends Command{
         }
         //@@author
         if(childIndex<0 || childIndex >= childList.size()){
-            return "Invalid child index";
+            return "Invalid child index!";
         }
         Child child= childList.get(childIndex);
         if (giftNames == null || giftNames.isEmpty()) {
