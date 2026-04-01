@@ -4,6 +4,7 @@ import seedu.clauscontrol.commands.Command;
 import seedu.clauscontrol.data.child.Child;
 import seedu.clauscontrol.data.elf.Elf;
 import seedu.clauscontrol.data.exception.IllegalValueException;
+import seedu.clauscontrol.data.todo.Todo;
 import seedu.clauscontrol.parser.Parser;
 import seedu.clauscontrol.ui.TextUi;
 import seedu.clauscontrol.storage.Storage;
@@ -39,6 +40,21 @@ public class ClausControl {
     private final ArrayList<Elf> elfList;
     private final Storage storage= new Storage("data.txt");
     private boolean isFinalized = false;
+    private static Logger logger = Logger.getLogger("Foo");
+
+    //@@author GShubhan
+    private boolean isFinalized = false;
+    private ArrayList<Todo> todoList = new ArrayList<>();
+    //@@author
+
+    private TextUi ui = new TextUi();
+    private final Parser parser = new Parser(todoList);
+    private ArrayList<Child> childList = new ArrayList<>();
+    private ArrayList<Elf> elfList = new ArrayList<>();
+
+    private Storage storage= new Storage("data.txt");
+
+
 
     public ClausControl() {
         this(System.in);
