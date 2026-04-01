@@ -22,9 +22,9 @@ public class GiftCommand extends Command{
         }
         //@@author
         if(childIndex<0 || childIndex >= childList.size()){
-            return "Please enter valid child index";
+            return "Invalid child index";
         }
-        Child child= childList.get(childIndex-1);
+        Child child= childList.get(childIndex);
         if (giftNames == null || giftNames.isEmpty()) {
             return "Please enter a gift name";
         }
