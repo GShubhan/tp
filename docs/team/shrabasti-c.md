@@ -53,9 +53,10 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 * Carried out basic formatting of whole team's parts (a significant endeavor) for both cases of User Guide.
 
 ### Contributions to the DG
-* Added implementation details for: child feature.
+* Added implementation details for: child feature (comprising child, view, edit, delete commands).
 * Added sequence diagram for above feature.
 * Wrote acknowledgements section.
+* Added class diagram with elaboration on Data Component.
 
 ### Contributions to Team-Based Tasks
 * Set up GitHub repository (current maintainer).

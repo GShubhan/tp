@@ -1,0 +1,27 @@
+@startuml
+skinparam arrowThickness 1.1
+skinparam arrowColor #9D0012
+
+Package Data as DataPackage <<Rectangle>>{
+
+Class "<<interface>>\nReadOnlyChild" as ReadOnlyChild
+Class "<<interface>>\nReadOnlyElf" as ReadOnlyElf
+Class Name
+Class Child
+Class IllegalValueException
+Class Elf
+Class ElfTask
+Class Gift
+Class Todo
+}
+
+Child .up.|> ReadOnlyChild
+Elf .up.|> ReadOnlyElf
+Child *--> "1"Name
+Elf *--> "1"Name
+Elf *--> "1" ElfTask
+Child *..> "0..*" Gift
+Child .up..> IllegalValueException : <<throws>>
+Elf .up..> IllegalValueException : <<throws>>
+
+@enduml

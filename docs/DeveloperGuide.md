@@ -54,6 +54,43 @@ The storage component provides a unified interface (`Storage.java`) that handles
 #### Notes
 - Storage is independent of the command execution logic
 
+## Data Component
+
+**API:** `seedu/clauscontrol/data`
+
+#### Overview
+The Data component is responsible for storing relevant entities in ClausControl.
+
+It comprises Class representations of:
+- Children 
+- Elves 
+- Todo items
+- Gifts
+- Exceptions
+
+#### Responsibilities
+The Data component houses all possible interacting entities of the application and their accompanying functions that support:
+- creation
+- modification
+- viewing
+- deletion
+
+#### Implementation
+![DataComponentDiagram.png](diagrams/DataComponentDiagram.png)
+The Data components interact in the following manner:
+- Child entity comprising Name and further Gift(s), implementing ReadOnlyChild and throwing IllegalValueException
+- Elf entity comprising ElfTask and Name, implementing ReadOnlyElf and throwing IllegalValueException
+- Standalone Todo implemented to represent todo actions
+
+#### Design
+The Data component provides a unified interface that handles the data related operations.
+It implements encapsulation, immutability, and separation of concerns in terms of validation.
+
+#### Usage
+- When the application starts, data is loaded from storage.
+- Other components interact with the Data entities.
+
+
 ## Design & implementation
 ### Child Feature (Chakraborty Shrabasti)
 
