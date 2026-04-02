@@ -18,7 +18,8 @@ public class GiftListCommand extends Command{
     /**
      * Executes the gift listing operation.
      *
-     * @return a formatted string showing all children with their assigned gifts,or a message if no children or gifts exist
+     * @return a formatted string showing all children with their assigned gifts,
+     *                            or a message if no children or gifts exist
      */
     @Override
     public String execute(){
@@ -26,7 +27,9 @@ public class GiftListCommand extends Command{
             return "No children added";
         }
 
-        StringBuilder sb= new StringBuilder("Here are all the gifts: \n ");
+        StringBuilder sb= new StringBuilder(
+                "Here are all the gifts:\n "
+        );
         boolean hasGifts=false;
 
         for(int i=0;i<childList.size();i++) {

@@ -40,12 +40,12 @@ public class PrepareGiftCommand extends Command {
         if (!isValidChildIndex()) {
             return "Invalid child index";
         }
-        Child child = childList.get(childIndex);
+        Child child = childList.get(childIndex-1);
 
         if (!isValidGiftIndex(child)) {
             return "Invalid gift index";
         }
-        Gift gift = child.getGifts().get(giftIndex);
+        Gift gift = child.getGifts().get(giftIndex-1);
 
 
         if (gift.isDelivered()) {
@@ -56,11 +56,11 @@ public class PrepareGiftCommand extends Command {
     }
 
     private boolean isValidGiftIndex(Child child) {
-        return giftIndex < 0 || giftIndex >= child.getGifts().size();
+        return giftIndex >= 1 && giftIndex <= child.getGifts().size();
     }
 
     private boolean isValidChildIndex() {
-        return childIndex < 0 || childIndex >= childList.size();
+        return childIndex >= 1 && childIndex <= childList.size();
     }
 }
 //@@author
