@@ -65,5 +65,6 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 * Set up TextUi and other output formatting for use of entire team.
 
 ### Review/Mentoring Contributions
-* Resolved majority of Git merge conflicts of team.
+* Resolved majority of Git merge conflicts of team. 
+* Debugging of conflicts/failing CI of other members.
 * Provided helpful advice regarding use of PlantUML.
