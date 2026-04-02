@@ -34,14 +34,17 @@ public class EditTodoCommand extends Command {
         }
 
         Todo todo = todoList.get(index);
+        StringBuilder sb = new StringBuilder("Todo Details changed:\n");
 
         try {
             if (newDeadline != null) {
                 todo.setDeadline(newDeadline);
+                sb.append("New Deadline: ").append(newDeadline).append("\n");
             }
 
             if (newDescription != null) {
                 todo.setDescription(newDescription);
+                sb.append("New Description: ").append(newDescription);
             }
 
         } catch (IllegalValueException e) {
@@ -49,7 +52,7 @@ public class EditTodoCommand extends Command {
             throw new RuntimeException(e);
         }
         logger.log(Level.INFO, "successful edit todo execution");
-        return "Todo Details changed!";
+        return String.valueOf(sb);
     }
 }
 //@@author

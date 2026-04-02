@@ -1,2 +1,3 @@
 buy gift|2026-04-02
 buy wrapper|2026-05-02
+take a break|2026-05-12

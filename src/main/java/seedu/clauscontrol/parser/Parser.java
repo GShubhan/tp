@@ -34,7 +34,9 @@ import seedu.clauscontrol.commands.RemoveTodoCommand;
 import seedu.clauscontrol.data.exception.IllegalValueException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 
 /**
@@ -400,9 +402,18 @@ public class Parser {
         for (String token : tokens) {
             if (token.startsWith("d/")) {
                 newDescription = token.substring(2).trim();
-            } else if (token.startsWith("/by")) {
+            } else if (token.startsWith("by/")) {
                 String newDeadlineString = token.substring(3).trim();
-                newDeadline = LocalDate.parse(newDeadlineString);
+                try
+                {
+                    newDeadline = LocalDate.parse(newDeadlineString);
+                    if (newDeadline.isBefore(LocalDate.now())) {
+                        throw new IllegalValueException("Deadline cannot be in the past!");
+                    }
+                } catch (DateTimeParseException e) {
+                    throw new IllegalValueException("Invalid date format! Please use YYYY-MM-DD e.g. 2026-04-05");
+                }
+
             }
         }
 
