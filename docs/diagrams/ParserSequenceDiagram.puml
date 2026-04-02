@@ -1,0 +1,19 @@
+@startuml
+title Parser Sequence (ClausControl)
+
+actor Santa
+participant "ClausControl" as App
+participant Parser
+participant Command
+
+Santa -> App : input command
+App -> Parser : parseCommand(input)
+
+Parser -> Parser : identify command type
+Parser -> Parser : extract parameters
+
+Parser --> App : Command object
+
+App -> Command : execute()
+
+@enduml

@@ -54,6 +54,51 @@ The storage component provides a unified interface (`Storage.java`) that handles
 #### Notes
 - Storage is independent of the command execution logic
 
+
+## Parser Component
+
+**API:** `Parser.java`
+
+#### Overview
+The `Parser` component takes in the user input and converts it into executable commands.
+
+The Parser determines:
+- The type of command to execute.
+- The parameters associated with the command.
+
+#### Responsibilities
+The Parser component:
+- Parses user inputs into command object.
+- Checks input format.
+- Handles incorrect inputs by throwing exceptions.
+
+#### Implementation
+The `Parser` class identifies commands with keywords and parameters with prefixes, in the user input .
+Examples of supported commands include:
+- `child n/NAME l/LOCATION a/AGE`
+- `gift CHILD_INDEX g/GIFT_NAME`
+- `action CHILD_INDEX d/DESCRIPTION s/SEVERITY`
+- `elf n/NAME`
+- `todo d/DESCRIPTION by/DATE`
+
+#### Design
+The Parser follows a command-based design:
+1. Identify the command keyword (e.g. `child`, `gift`, `edit`).
+2. Extract parameters using prefixes.
+3. Validate inputs.
+4. Return the corresponding `Command` object.
+
+#### Error Handling
+The Parser throws `IllegalValueException` when:
+- Compulsory parameters are missing.
+- Duplicate parameters are provided.
+- Invalid prefixes are used.
+
+#### Sequence Diagram
+The following diagram shows how user input is processed by the Parser.
+![ParserSequenceDiagram.png](diagrams/ParserSequenceDiagram.png)
+
+
 ## Design & implementation
 
 ### Finalize Feature (Shubhan Gabra)
