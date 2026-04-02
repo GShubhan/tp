@@ -76,7 +76,8 @@ The Data component houses all possible interacting entities of the application a
 - deletion
 
 #### Implementation
-![DataComponentDiagram.png](diagrams/DataComponentDiagram.png)
+![DataComponentDiagram.png](diagrams/DataComponentDiagram.png)    
+  
 The Data components interact in the following manner:
 - Child entity comprising Name and further Gift(s), implementing ReadOnlyChild and throwing IllegalValueException
 - Elf entity comprising ElfTask and Name, implementing ReadOnlyElf and throwing IllegalValueException
