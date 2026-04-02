@@ -30,7 +30,7 @@ public class EditCommand extends Command {
 
         String nameChanged = "Child "+(childIndex + 1) + "'s name changed to ";
         String locationChanged = "Child "+(childIndex + 1) + "'s location changed to ";
-        String ageChanged = "Child "+(childIndex + 1) + "'s name changed to ";
+        String ageChanged = "Child "+(childIndex + 1) + "'s age changed to ";
         StringBuilder finalString = new StringBuilder("Ho ho ho! The following have changed.\n");
 
         try {
