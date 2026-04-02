@@ -19,9 +19,6 @@ public class RemoveTodoCommand extends Command {
     @Override
     public String execute() {
         try {
-            if (todoList == null || todoList.isEmpty()) {
-                return "No todos to remove!";
-            }
             if (index < 1 || index > todoList.size()) {
                 return "Enter a valid todo index!";
             }
