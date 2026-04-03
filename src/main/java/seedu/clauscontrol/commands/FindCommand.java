@@ -19,6 +19,7 @@ public class FindCommand extends Command {
         assert query != null : "Search query should not be null";
         assert type != null : "Search type should not be null";
         
+        
         this.query = query.trim().toLowerCase();
         this.type = type;
         

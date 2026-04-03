@@ -604,9 +604,12 @@ public class Parser {
         } else if (trimmedArgs.startsWith("a/")) {
             query = trimmedArgs.substring(2).trim();
             searchType = FindCommand.SearchType.AGE;
-
+            
             try {
-                Integer.parseInt(query);
+                int age = Integer.parseInt(query);
+                if (age <= 0) {
+                    throw new IllegalValueException("Age must be a non-negative integer!");
+                }
             } catch (NumberFormatException e) {
                 throw new IllegalValueException("Age must be a valid integer!");
             }
