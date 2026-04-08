@@ -38,18 +38,31 @@ It handles saving and loading of  data such as:
 - Todo items
 Data is stored in a file and loaded back into the system when the application starts.
 
-#### Responsibilities
-The Storage component:
-- Saves application data to local device.
-- Loads saved data.
-
 #### Implementation
-The Storage component interacts with the following classes:
-- child
-- gift
-- elf
-- elftask
-- todo
+**Saving data**
+The save() method writes the lists into a .txt file in a structured format.
+1. Each child's name is written with the CHILD tag.
+2. The corresponding gifts of the child are written just below it with the GIFT tag.
+3. The child's actions and severities are stores with the ACTION tag.
+4. Each elf is written with the ELF tag.
+5. The corresponding elf tasks are written under it with the TASK tag.
+
+**Loading data**
+The load() method reconstructs data from the .txt file.
+1. It reads the file line by line.
+2. Splits each line using "|".
+3. Processes:
+   "CHILD" → creates new Child
+   "GIFT" → creates new Gift and restores the status of the gift.
+   "ACTION" → restores an action and its severity
+   "ELF" → creates a new Elf
+   "TASK" → adds a ElfTask
+4. Restores gift state:
+   PREPARED → markPrepared()
+   DELIVERED → markDelivered()
+   default → remains IN_PROGRESS
+5. Adds gift to the current child
+
 
 #### Design
 The storage component provides a unified interface (`Storage.java`) that handles the storage related operations.
@@ -58,11 +71,20 @@ The storage component provides a unified interface (`Storage.java`) that handles
 - When the application starts, data is loaded from storage.
 - When the user inputs commands,the resulting data changes are saved.
 
-#### Sequence diagram to show control flow
+#### UML diagrams to show control flow
+The class diagram and sequence diagrams are as follows-
+
+
+![StorageClassDiagram.png](diagrams/StorageClassDiagram.png)
+
 ![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
+
+
 
 #### Notes
 - Storage is independent of the command execution logic
+The storage component does not handle user inputs. The Logic layer interacts with Storage through its public methods- 
+save() and load() only. The Storage component does not know how data is handled internally.
 
 ## Data Component
 
@@ -757,7 +779,7 @@ Given below is a sequence diagram showing how the reset command works.
     - **Pros:** Fails fast and loudly if the application state is unexpectedly broken
     - **Cons:** Less robust in edge cases such as testing or partial initialisation scenarios
 
-```
+
 ### Add gift feature(Prerana Ravi Shankar)
 
 #### Overview
@@ -891,54 +913,6 @@ Given below is the sequence diagram
   - **Alternative 2:** Merge the command into deliveryStatus command.
     - **Pros:** Fewer classes.
     - **Cons:** Increases complexity of conditional logic.
-
-
-### Storage  (Prerana Ravi Shankar)
-
-#### Overview
-This component saves the data in the application and reloads it upon running the application.
-It stores:
-1. Child name
-2. Gift name/s
-3. Actions and severities
-4. Elves and elf tasks
-
-#### Implementation
-**Saving data**
-The save() method writes the lists into a .txt file in a structured format.
-1. Each child's name is written with the CHILD tag.
-2. The corresponding gifts of the child are written just below it with the GIFT tag.
-3. The child's actions and severities are stores with the ACTION tag.
-4. Each elf is written with the ELF tag.
-5. The corresponding elf tasks are written under it with the TASK tag.
-
-**Loading data**
-The load() method reconstructs data from the .txt file.
-1. It reads the file line by line.
-2. Splits each line using "|".
-3. Processes:
-   "CHILD" → creates new Child
-   "GIFT" → creates new Gift and restores the status of the gift.
-   "ACTION" → restores an action and its severity
-   "ELF" → creates a new Elf 
-   "TASK" → adds a ElfTask
-4. Restores gift state:
-   PREPARED → markPrepared()
-   DELIVERED → markDelivered()
-   default → remains IN_PROGRESS
-5. Adds gift to the current child
-
-#### UML Diagram- Sequence Diagram
-Given below is the sequence diagram 
-![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
-
-**Aspect:** How to implement the Storage feature
-  - **Alternative 1 (current choice):** Simple .txt file used to store data
-    - **Pros:** Human-readable file.
-    - **Cons:** Less structures.
-  - **Alternative 2:** JSON format
-    - **Pros:** Structured.
-    - **Cons:** Requires external libraries.
 
 
 ### GiftList Feature  (Prerana Ravi Shankar)
@@ -1243,4 +1217,3 @@ Given below are instructions to test the app manually.
 1. Add some children and todos, then type `bye` to exit.
 2. Relaunch the app.
 3. Expected: Children and todos are restored.
-'''

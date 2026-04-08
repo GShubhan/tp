@@ -9,6 +9,7 @@ participant Elf
 participant ElfTask as Task
 
 App -> Storage : load()
+activate storage
 Storage -> File : readLine()
 
 loop for each line
@@ -53,5 +54,5 @@ loop for each line
 end
 
 Storage --> App : StorageData(children, elves)
-
+deactivate Storage
 @enduml
