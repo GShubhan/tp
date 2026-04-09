@@ -37,6 +37,7 @@ The sections below give more details of the major components.
 
 ## Storage Component
 **API:** `Storage.java`
+
 #### Overview
 The Storage component is responsible for managing persistent data in ClausControl.
 It handles saving and loading of  data such as:
