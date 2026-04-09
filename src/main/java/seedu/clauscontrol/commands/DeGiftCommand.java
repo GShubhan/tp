@@ -14,7 +14,6 @@ public class DeGiftCommand extends Command {
     private int giftIndex;
 
     /**
-     *
      * @param childIndex the index of the target child
      * @param giftIndex  the index of the target gift
      */
