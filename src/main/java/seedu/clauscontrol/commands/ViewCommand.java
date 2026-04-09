@@ -54,10 +54,8 @@ public class ViewCommand extends Command{
         ArrayList<String> actions = child.getActions();
         ArrayList<Integer> severities = child.getSeverities();
         if (!actions.isEmpty()) {
-            for (int i = 0; i < actions.size(); i++) {
-                sb.append("Actions: \n");
-                createActionList(actions, severities, sb);
-            }
+            sb.append("Actions: \n");
+            createActionList(actions, severities, sb);
         }
 
         String listAssignment = getListAssignment(child);
@@ -71,7 +69,7 @@ public class ViewCommand extends Command{
             return child.getListAssignment();
         }
 
-        if (child.getSeverities().isEmpty()){
+        if (child.getSeverities().isEmpty() && child.getActions().isEmpty()){
             return "Yet to be evaluated/assigned.";
         }
 
