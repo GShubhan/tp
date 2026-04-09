@@ -108,6 +108,8 @@ public class ClausControl {
                 }
                 try {
                     storage.save(childList, elfList, isFinalized);  // now saves the correct value
+                    todoStorage.save(todoList);
+
                 } catch (IOException e) {
                     logger.warning("Error saving: " + e.getMessage());
                 }
