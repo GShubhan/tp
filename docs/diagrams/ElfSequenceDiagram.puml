@@ -7,7 +7,7 @@ participant ":Parser" as Parser
 participant "command:ElfCommand" as ElfCommand
 participant "name:Name" as Name
 participant "toAdd:Elf" as Elf
-participant "elfList" as elfList
+participant ":elfList" as elfList
 
 Santa -> Parser : "elf Buddy"
 activate Parser

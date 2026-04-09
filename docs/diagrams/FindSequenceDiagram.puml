@@ -15,10 +15,9 @@ Parser -> Parser : parseCommand("find n/Alice")
 
 create FindCommand
 Parser -> FindCommand : <<create>>\nnew FindCommand("Alice", NAME)
-activate FindCommand
 
 Parser -> FindCommand : execute()
-
+activate FindCommand
 FindCommand -> childList : isEmpty()
 activate childList
 childList --> FindCommand : false

@@ -5,7 +5,7 @@ skinparam SequenceMessageAlignment center
 actor "Santa" as Santa
 participant ":Parser" as Parser
 participant "command:ElfListCommand" as ElfListCommand
-participant "elfList" as elfList
+participant ":elfList" as elfList
 participant "currentElf:Elf" as Elf
 participant "task:ElfTask" as ElfTask
 
@@ -15,10 +15,10 @@ activate Parser
 Parser -> Parser : parseCommand("elflist")
 
 create ElfListCommand
-Parser -> ElfListCommand : <<create>>\nnew ElfListCommand()
-activate ElfListCommand
+Parser -> ElfListCommand : new ElfListCommand()
 
 Parser -> ElfListCommand : execute()
+activate ElfListCommand
 
 opt elfList is empty
     ElfListCommand --> Parser : "The elf list is empty."
@@ -47,9 +47,9 @@ else elfList is not empty
         end
     end
     ElfListCommand --> Parser : resultString
+    deactivate ElfListCommand
 end
 
-deactivate ElfListCommand
 Parser --> Santa : "Here are all elves and their tasks: ..."
 deactivate Parser
 

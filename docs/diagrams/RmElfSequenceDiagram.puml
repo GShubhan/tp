@@ -13,7 +13,7 @@ activate Parser
 Parser -> Parser : parseCommand("rmelf 1")
 
 create RmElfCommand
-Parser -> RmElfCommand : <<create>>\nnew RmElfCommand(1)
+Parser -> RmElfCommand : new RmElfCommand(1)
 activate RmElfCommand
 
 Parser -> RmElfCommand : execute()

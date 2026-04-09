@@ -16,10 +16,9 @@ Parser -> Parser : parseCommand("task 1 t/Make toys")
 
 create TaskCommand
 Parser -> TaskCommand : new TaskCommand(1, "Make toys")
-activate TaskCommand
 
 Parser -> TaskCommand : execute()
-
+activate TaskCommand
 TaskCommand -> elfList : size()
 activate elfList
 elfList --> TaskCommand : listSize

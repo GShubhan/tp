@@ -14,11 +14,9 @@ activate Parser
 Parser -> Parser : parseCommand("reset")
 
 create ResetCommand
-Parser -> ResetCommand : <<create>>\nnew ResetCommand()
-activate ResetCommand
-
+Parser -> ResetCommand : new ResetCommand()
 Parser -> ResetCommand : execute()
-
+activate ResetCommand
 note over ResetCommand : isFinalized = false
 
 ResetCommand -> childList : clear()
