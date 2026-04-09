@@ -1,8 +1,7 @@
 # Developer Guide
 
 ## Acknowledgements
-
-* We, team CS2113-T09-2, acknowledge the use of the following sources in our tP.
+We, team CS2113-T09-2, acknowledge the use of the following sources in our tP.
 
 | Source                                                                                              | Extent of reuse                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | 
 |:----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -13,7 +12,18 @@
 | **ChatGPT**                                                                                         | The load() function of Storage class and find commands was written with the aid of ChatGPT. <br/> The prepareAdd() and prepareEdit() functions of the Parser class (along with their refactored helpers) were reused from ChatGPT with significant modifications. ChatGPT was also used for trivial debugging.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Claude**                                                                                          | The tool was used for trivial debugging of ParserTest class and elf-related commands after a merge conflict, and to refine the DG language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
+## Design
+### Architecture
+The bulk of the app’s work is done by the following five components:
 
+* Main (ClausControl.java): Starts the application and runs the command loop until termination.
+* Storage: Reads data from, and writes data to, the hard disk.
+* Data: Responsible for storing relevant entities in ClausControl.
+* Parser: Takes in user input and executes commands.
+* (trivial implementation) Ui: The Ui of the App.
+  ![ArchitectureDiagram.png](diagrams/ArchitectureDiagram.png)
+  
+The sections below give more details of the major components.
 
 ## Storage Component
 
@@ -28,18 +38,38 @@ It handles saving and loading of  data such as:
 - Todo items
 Data is stored in a file and loaded back into the system when the application starts.
 
-#### Responsibilities
-The Storage component:
-- Saves application data to local device.
-- Loads saved data.
+The class diagram is-
+
+![StorageClassDiagram.png](diagrams/StorageClassDiagram.png)
 
 #### Implementation
-The Storage component interacts with the following classes:
-- child
-- gift
-- elf
-- elftask
-- todo
+**Saving data**
+The save() method writes the lists into a .txt file in a structured format.
+1. Each child's name is written with the CHILD tag.
+2. The corresponding gifts of the child are written just below it with the GIFT tag.
+3. The child's actions and severities are stores with the ACTION tag.
+4. Each elf is written with the ELF tag.
+5. The corresponding elf tasks are written under it with the TASK tag.
+
+**Loading data**
+The load() method reconstructs data from the .txt file.
+1. It reads the file line by line.
+2. Splits each line using "|".
+3. Processes:
+   "CHILD" → creates new Child
+   "GIFT" → creates new Gift and restores the status of the gift.
+   "ACTION" → restores an action and its severity
+   "ELF" → creates a new Elf
+   "TASK" → adds a ElfTask
+4. Restores gift state:
+   PREPARED → markPrepared()
+   DELIVERED → markDelivered()
+   default → remains IN_PROGRESS
+5. Adds gift to the current child
+
+Below is the sequence diagram-
+
+![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
 
 #### Design
 The storage component provides a unified interface (`Storage.java`) that handles the storage related operations.
@@ -48,11 +78,10 @@ The storage component provides a unified interface (`Storage.java`) that handles
 - When the application starts, data is loaded from storage.
 - When the user inputs commands,the resulting data changes are saved.
 
-#### Sequence diagram to show control flow
-![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
-
 #### Notes
 - Storage is independent of the command execution logic
+The storage component does not handle user inputs. The Logic layer interacts with Storage through its public methods- 
+save() and load() only. The Storage component does not know how data is handled internally.
 
 ## Data Component
 
@@ -113,7 +142,7 @@ The `Parser` class identifies commands with keywords and parameters with prefixe
 Examples of supported commands include:
 - `child n/NAME l/LOCATION a/AGE`
 - `gift CHILD_INDEX g/GIFT_NAME`
-- `action CHILD_INDEX d/DESCRIPTION s/SEVERITY`
+- `action CHILD_INDEX a/ACTION s/SEVERITY`
 - `elf n/NAME`
 - `todo d/DESCRIPTION by/DATE`
 
@@ -134,9 +163,13 @@ The Parser throws `IllegalValueException` when:
 The following diagram shows how user input is processed by the Parser.
 ![ParserSequenceDiagram.png](diagrams/ParserSequenceDiagram.png)
 
+#### Class Diagram
+
+![ParserClassDiagram.png](diagrams/ParserClassDiagram.png)
+
 
 ## Design & implementation
-### Child Feature (Chakraborty Shrabasti)
+### Child Feature
 
 #### Use Case 
 Below is a system-wide use case to illustrate the child profile and its associated actions.
@@ -145,36 +178,37 @@ Within the Child Feature, Santa can interact with the `child` profile using the 
 These commands can be used in conjunction with the `childlist` command.
 Given below is an example usage scenario: 
 
-**Santa, at the beginning of the year, adds children to his system**
+**A.** Santa, at the beginning of the year, adds children to his system.
 1. child n/Bruce a/25
 2. child n/Diana l/Washington DC
 3. child n/Clark 
 
-**Santa, later in the year, consults the list of children and their individual profiles as and when necessary**
-**He makes updates when needed as well**
+**B.** Santa, later in the year, consults the list of children and their individual profiles as and when necessary.
+
+He makes updates when needed as well.
 1. childlist
 2. view 3
 2. edit 3 n/Kal El
 3. delete 1
 
-**Santa, throughout the year, adds actions to children's profiles with associated severities in the range [-5, 5].**
-**Each child has a total score attribute that is the sum of his/her action severities. These gifts determine which of Santa's lists they end up in (naughty/nice)**
+**C.** Santa, throughout the year, adds actions to children's profiles with associated severities in the range [-5, 5].
+Each child has a total score attribute that is the sum of his/her action severities. This score determines which of Santa's lists they end up in (naughty/nice)
 1. action 1 a/helped grandma s/2
 2. action 1 a/did homework s/5
 3. action 2 a/was rude to classmate s/-1
 
-**One can observe that child 1 with total score 3 ends up in nice list whereas child 2 ends up in naughty one**
-**However, Santa can `reassign` kids to different lists as well, for instance moving child 2 from naughty to nice**
+One can observe that child 1 with total score 3 ends up in the nice list whereas child 2 ends up in the naughty one.
+However, Santa can `reassign` kids to different lists as well, for instance moving child 2 from naughty to nice.
 
-**Nearing Christmas, Santa freezes the lists, after which gifts can be assigned and no more actions can be added.**
+**D.** Nearing Christmas, Santa freezes the lists, after which gifts can be assigned and no more actions can be added.
 
 #### Implementation
-As mentioned earlier, the `child` command creates a child entity/profile consisting of its name and location.
+As mentioned earlier, the `child` command creates a child entity/profile consisting of its name (minimally) as well as age and location.
 As the implementation of `child` is the most complex of its related commands (`child`, `view`, `edit`, `delete`), let us examine the same.
 
 The proposed child profile is facilitated by `Child` Class.
 It implements `ReadOnlyChild` which contains a name fetching mechanism, the name being stored internally via a `Name` class with a reference to a `name` String input by the user.
-The child operation must minimally have a name argument i.e. location, etc. are optional.
+The child operation must minimally have a name argument i.e. location, age are optional.
 Additionally, it implements the following operations:
 * `toAdd()`—adds the child to the internal child list.
 * `execute()`—returns a successful operation message.
@@ -188,11 +222,11 @@ Additionally, it implements the following operations:
 5. The `Child` is added to the Child List.
 6. The successful message is displayed.
 
-Given below is a sequence diagram describing the child operation (happy path).
+Given below is a sequence diagram describing the child operation.
 ![](diagrams/ChildSequenceDiagram.png)
 
 **Aspect:** How to implement the Child Profile
-- **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which implements `Child`
+- **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which `Child` implements
     - **Pros:** Ensures no external access as well as immutability
     - **Cons:** More lines of code and more complex implementation (extra interface)
 
@@ -746,7 +780,7 @@ Given below is a sequence diagram showing how the reset command works.
     - **Pros:** Fails fast and loudly if the application state is unexpectedly broken
     - **Cons:** Less robust in edge cases such as testing or partial initialisation scenarios
 
-```
+
 ### Add gift feature(Prerana Ravi Shankar)
 
 #### Overview
@@ -769,6 +803,7 @@ The following steps occur-
 
 #### UML Diagram- Sequence Diagram
 Given below is the sequence diagram
+
 ![GiftSequenceDiagram.png](diagrams/GiftSequenceDiagram.png)
 
 **Aspect:** How to implement the Gift feature
@@ -838,7 +873,7 @@ The following steps occur-
 Appropriate error messages are returned in case a check fails.
 
 #### UML Diagram- Sequence Diagram
-Given below is the sequence diagram
+Given below is the sequence diagram which describes the happy path.
 ![DeliveryStatusSequenceDiagram.png](diagrams/DeliveryStatusSequenceDiagram.png)
 
 **Aspect:** How to implement the Delivery Status feature
@@ -882,54 +917,6 @@ Given below is the sequence diagram
     - **Cons:** Increases complexity of conditional logic.
 
 
-### Storage  (Prerana Ravi Shankar)
-
-#### Overview
-This component saves the data in the application and reloads it upon running the application.
-It stores:
-1. Child name
-2. Gift name/s
-3. Actions and severities
-4. Elves and elf tasks
-
-#### Implementation
-**Saving data**
-The save() method writes the lists into a .txt file in a structured format.
-1. Each child's name is written with the CHILD tag.
-2. The corresponding gifts of the child are written just below it with the GIFT tag.
-3. The child's actions and severities are stores with the ACTION tag.
-4. Each elf is written with the ELF tag.
-5. The corresponding elf tasks are written under it with the TASK tag.
-
-**Loading data**
-The load() method reconstructs data from the .txt file.
-1. It reads the file line by line.
-2. Splits each line using "|".
-3. Processes:
-   "CHILD" → creates new Child
-   "GIFT" → creates new Gift and restores the status of the gift.
-   "ACTION" → restores an action and its severity
-   "ELF" → creates a new Elf 
-   "TASK" → adds a ElfTask
-4. Restores gift state:
-   PREPARED → markPrepared()
-   DELIVERED → markDelivered()
-   default → remains IN_PROGRESS
-5. Adds gift to the current child
-
-#### UML Diagram- Sequence Diagram
-Given below is the sequence diagram 
-![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
-
-**Aspect:** How to implement the Storage feature
-  - **Alternative 1 (current choice):** Simple .txt file used to store data
-    - **Pros:** Human-readable file.
-    - **Cons:** Less structures.
-  - **Alternative 2:** JSON format
-    - **Pros:** Structured.
-    - **Cons:** Requires external libraries.
-
-
 ### GiftList Feature  (Prerana Ravi Shankar)
 
 #### Overview
@@ -949,6 +936,7 @@ When Santa enters "giftlist " the Parser creates a GiftListCommand object.
 
 #### UML Diagram- Sequence Diagram
 Given below is the sequence diagram.
+
 ![GiftListSequenceDiagram.png](diagrams/GiftListSequenceDiagram.png)
 
 **Aspect:** How to implement the GiftList feature
@@ -1232,4 +1220,3 @@ Given below are instructions to test the app manually.
 1. Add some children and todos, then type `bye` to exit.
 2. Relaunch the app.
 3. Expected: Children and todos are restored.
-'''

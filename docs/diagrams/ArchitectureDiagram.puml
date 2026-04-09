@@ -1,0 +1,29 @@
+@startuml
+skinparam style strictuml
+allowmixing
+skinparam arrowThickness 1.1
+skinparam arrowColor #blue
+
+Package ClausControl <<Rectangle>>{
+    Class UI
+    Class Parser
+    Class Storage
+    Class Data
+    Class Main
+}
+
+actor Santa
+
+Santa --> UI
+UI -right-> Main
+Main --> Parser
+Parser --> Data
+Data .> Parser
+Parser -.> Main
+Main .up.> Santa
+
+Data -> Storage
+Storage .> Data
+
+
+@enduml

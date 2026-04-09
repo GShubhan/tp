@@ -1,6 +1,8 @@
 @startuml
+skinparam style strictuml
 skinparam arrowThickness 1.1
 skinparam arrowColor #9D0012
+
 
 Package Data as DataPackage <<Rectangle>>{
 

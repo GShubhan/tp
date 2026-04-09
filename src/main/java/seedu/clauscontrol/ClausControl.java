@@ -65,6 +65,8 @@ public class ClausControl {
             StorageData data = storage.load();
             this.childList = new ArrayList<>(data.children);
             this.elfList.addAll(data.elves);
+            this.isFinalized = data.isFinalized;
+
         } catch (IOException e) {
             this.childList = new ArrayList<>();
         }
@@ -75,6 +77,7 @@ public class ClausControl {
             this.todoList = new ArrayList<>();
         }
         this.parser = new Parser(todoList);  // initialize AFTER loading todos
+        this.parser.setChildList(childList);
         //@@author
     }
     //@@author
@@ -98,20 +101,15 @@ public class ClausControl {
                 command.setData(childList, elfList, isFinalized);
                 //@@author GShubhan
                 String result = command.execute();
-                try {
-                    storage.save(childList, elfList);
-                } catch (IOException e) {
-                    logger.warning("Error saving: " + e.getMessage());
-                }
                 if (command instanceof FinalizeCommand) {
                     isFinalized = true;
                 } else if (command instanceof ResetCommand) {
                     isFinalized = false;
                 }
                 try {
-                    todoStorage.save(todoList);
+                    storage.save(childList, elfList, isFinalized);  // now saves the correct value
                 } catch (IOException e) {
-                    logger.warning("Error saving todos: " + e.getMessage());
+                    logger.warning("Error saving: " + e.getMessage());
                 }
 
                 displayWithDividers(result);

@@ -1,0 +1,59 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+package storage {
+
+class Storage {
+  - filePath : String
+  + save(children : List<Child>, elves : List<Elf>, isFinalized : boolean)
+  + load() : StorageData
+}
+
+class StorageData {
+  + children : List<Child>
+  + elves : List<Elf>
+  + isFinalized : boolean
+}
+
+class Child {
+  - name : Name
+  - gifts : ArrayList<Gift>
+  - age : int
+  - location : String
+  - actions : ArrayList<String>
+  - severities : ArrayList<Integer>
+}
+
+class Gift {
+  - giftName : String
+  - state : State
+}
+
+class Elf {
+  - name : Name
+  - tasks : ArrayList<ElfTask>
+}
+
+class ElfTask {
+  - task : String
+}
+
+enum State {
+  PREPARED
+  UNDELIVERED
+  DELIVERED
+}
+
+}
+
+Storage ..> StorageData : <<create>>
+
+StorageData o-- "0..*" Child
+StorageData o-- "0..*" Elf
+
+Child *-- "0..*" Gift
+Elf *-- "0..*" ElfTask
+
+Gift --> State
+
+@enduml
