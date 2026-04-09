@@ -9,7 +9,7 @@ We, team CS2113-T09-2, acknowledge the use of the following sources in our tP.
 | **[AddressBook-Level3 (AB3)](https://github.com/se-edu/addressbook-level3/)**                       | The docs of our tP (AboutUs, README, UG, DG & PPPs) were made with reference to the AB3 application's docs.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **[iP (author: shrabasti-c)](https://github.com/shrabasti-c/ip)**                       | The structure of class ChildCommand was adapted from the *Command classes of shrabasti-c's iP with some modifications.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | **[GeeksforGeeks JUnit tests](https://www.geeksforgeeks.org/advance-java/unit-testing-of-system-out-println-with-junit/)**                      | The class ClausControlTest was inspired by the JUnit tests on the aforementioned website.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| **ChatGPT**                                                                                         | The load() function of Storage class was written with the aid of ChatGPT. <br/> The prepareAdd() and prepareEdit() functions of the Parser class (along with their refactored helpers) were reused from ChatGPT with significant modifications. ChatGPT was also used for trivial debugging.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **ChatGPT**                                                                                         | The load() function of Storage class was written with the aid of ChatGPT. <br/> The prepareAdd() and prepareEdit() functions of the Parser class (along with their refactored helpers) were reused from ChatGPT with significant modifications. ChatGPT was also used for trivial debugging of source and documentation code.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Claude**                                                                                          | The tool was used for trivial debugging of ParserTest class after a merge conflict, and to refine the DG language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ## Design
@@ -145,7 +145,7 @@ The `Parser` class identifies commands with keywords and parameters with prefixe
 Examples of supported commands include:
 - `child n/NAME l/LOCATION a/AGE`
 - `gift CHILD_INDEX g/GIFT_NAME`
-- `action CHILD_INDEX d/DESCRIPTION s/SEVERITY`
+- `action CHILD_INDEX a/ACTION s/SEVERITY`
 - `elf n/NAME`
 - `todo d/DESCRIPTION by/DATE`
 
@@ -168,7 +168,7 @@ The following diagram shows how user input is processed by the Parser.
 
 
 ## Design & implementation
-### Child Feature (Chakraborty Shrabasti)
+### Child Feature
 
 #### Use Case 
 Below is a system-wide use case to illustrate the child profile and its associated actions.
@@ -221,7 +221,7 @@ Additionally, it implements the following operations:
 5. The `Child` is added to the Child List.
 6. The successful message is displayed.
 
-Given below is a sequence diagram describing the child operation (happy path).
+Given below is a sequence diagram describing the child operation.
 ![](diagrams/ChildSequenceDiagram.png)
 
 **Aspect:** How to implement the Child Profile

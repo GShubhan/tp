@@ -1,22 +1,22 @@
 @startuml
+Actor Santa
+participant "<u>:Parser" as Parser #E9F6EF
+participant "<u>:ChildCommand" as ChildCommand #E9F6EF
+participant "<u>:Name" as Name #E9F6EF
+participant "<u>:Child" as Child #E9F6EF
 
-participant Parser #E9F6EF
-participant ChildCommand #E9F6EF
-participant childList #E9F6EF
-participant Name #E9F6EF
-participant Child #E9F6EF
-
-->Parser: "child n/Bruce Wayne"
+Santa->Parser: "child n/Bruce Wayne"
 activate Parser
 
 Parser->Parser: parseCommand("child n/Bruce Wayne")
 activate Parser
 Parser->Parser: prepareAdd(args)
+create ChildCommand
 Parser->ChildCommand: new ChildCommand("Bruce Wayne")
-
 
 activate ChildCommand
 
+create Name
 ChildCommand->Name: new Name("Bruce Wayne")
 activate Name
 Name->Name: isValidName()
@@ -31,19 +31,16 @@ ChildCommand->Child: new Child(name)
 activate Child
 Child-->ChildCommand: Child object (toAdd)
 deactivate Child
+deactivate ChildCommand
 
 ChildCommand->ChildCommand: execute()
+note right: execute() adds the child to the global child list
 activate ChildCommand
-ChildCommand->childList: add(toAdd)
-activate childList
-childList --> ChildCommand
-deactivate childList
 deactivate ChildCommand
 ChildCommand --> Parser: ChildCommand
-deactivate ChildCommand
 
 deactivate Parser
- <-- Parser: "Ho ho ho! New child added: Bruce Wayne"
+Santa<-- Parser: "Ho ho ho! New child added: Bruce Wayne"
 deactivate Parser
 
 
