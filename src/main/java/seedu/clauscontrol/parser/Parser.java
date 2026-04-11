@@ -194,23 +194,18 @@ public class Parser {
             return prepareGiftAction(arguments);
         case "degift":
             DeGiftCommand temp = prepareDeGiftAction(arguments);
-
             int degiftChildIndex = temp.getChildIndex();
             int degiftGiftIndex = temp.getGiftIndex();
-            if (degiftChildIndex < 1 || degiftChildIndex > childList.size()) {
-                throw new IllegalValueException("Please enter valid child index");
-            }
-            Child dgChild = childList.get(degiftChildIndex - 1);
-            if (degiftGiftIndex < 1 || degiftGiftIndex > dgChild.getGifts().size()) {
-                throw new IllegalValueException("Please enter valid gift index");
-            }
-            if (dgChild.getGifts().get(degiftGiftIndex - 1).isDelivered()) {
-                throw new IllegalValueException("Cannot remove a delivered gift!");
+            if (degiftChildIndex >= 1 && degiftChildIndex <= childList.size()) {
+                Child dgChild = childList.get(degiftChildIndex - 1);
+                if (degiftGiftIndex >= 1 && degiftGiftIndex <= dgChild.getGifts().size()) {
+                    if (dgChild.getGifts().get(degiftGiftIndex - 1).isDelivered()) {
+                        throw new IllegalValueException("Cannot remove a delivered gift!");
+                    }
+                }
             }
             pendingCommand = temp;
-            throw new IllegalValueException(
-                    "WARNING: You are about to remove a gift. Type 'confirm' to proceed."
-            );
+            throw new IllegalValueException("WARNING: You are about to remove a gift. Type 'confirm' to proceed.");
         case "delivery_status":
             return prepareDeliverAction(arguments);
         case "giftlist":
@@ -521,21 +516,21 @@ public class Parser {
     }
 
     private static void addGifts(String[] parts, ArrayList<String> giftNames) {
-        StringBuilder Gift = null;
+        StringBuilder gift = null;
         for (int i = 1; i < parts.length; i++) {
             if (parts[i].startsWith(GIFT_PREFIX)) {
-                if (Gift != null) {
-                    giftNames.add(Gift.toString().trim());
+                if (gift != null) {
+                    giftNames.add(gift.toString().trim());
                 }
-                Gift = new StringBuilder(parts[i].substring(2));
+                gift = new StringBuilder(parts[i].substring(2));
             } else {
-                if (Gift != null) {
-                    Gift.append(" ").append(parts[i]);
+                if (gift != null) {
+                    gift.append(" ").append(parts[i]);
                 }
             }
         }
-        if (Gift != null) {
-            giftNames.add(Gift.toString().trim());
+        if (gift != null) {
+            giftNames.add(gift.toString().trim());
         }
     }
     /**
