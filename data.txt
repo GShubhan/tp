@@ -3,3 +3,4 @@ CHILD|alice|map|11
 CHILD|bob||-1
 CHILD|bob|mao|-1
 CHILD|cici||11
+ELF|aaa
