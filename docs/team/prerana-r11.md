@@ -88,7 +88,7 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 #### DG:
 * Added implementation details for: add gift, remove gift, delivery_status, giftlist,storage and prepare gift features.
 #76, #95, #104, #114
-* Added sequence diagram for all features.
+* Added sequence diagram for gift related features.
 * Added documentation and UML diagrams for Storage and Parser components in Design section.
 
 ### Contributions to Team-Based Tasks
@@ -97,6 +97,7 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 * Released JAR files on GitHub.
 * Helped in testing of implemented commands and reported bugs to fix.
 * Reviewed PRs from teammates
+* Formatted UG and DG during releases.
 
 
 ### Review/Mentoring Contributions
