@@ -66,7 +66,7 @@ Highlights:
 * Returns error messages when child or gift index does not exist.
 * Handled possible errors.
 
-#### 6. Storage Feature (childlist,giftlist and elf)
+#### Feature: Storage Feature (childlist,giftlist and elf)
 Allows Santa to access saved data(childlist,giftlist and elflist) across all sessions.
 * Implemented `Storage` class to handle saving and loading of data.
 * Stored data in format(CHILD,GIFT,ELF,TASK).
