@@ -52,11 +52,11 @@ The class diagram is-
 #### Implementation
 **Saving data**
 The save() method writes the lists into a .txt file in a structured format.
-1. Each child's name is written with the CHILD tag.
-2. The corresponding gifts of the child are written just below it with the GIFT tag.
-3. The child's actions and severities are stores with the ACTION tag.
-4. Each elf is written with the ELF tag.
-5. The corresponding elf tasks are written under it with the TASK tag.
+1. Each child's name,location,age and naught/nice assignment is stored with the CHILD tag.
+2. The corresponding gifts of the child are stored with the GIFT tag.
+3. The child's actions and severities are stored with the ACTION tag.
+4. Each elf is stored with the ELF tag.
+5. The corresponding elf tasks are stored with the TASK tag.
 
 **Loading data**
 The load() method reconstructs data from the .txt file.
