@@ -42,7 +42,6 @@ Allows Santa to search for specific children in the list using name, age, or loc
 
 #### 7. View elf feature (`elflist` command)
 Allows Santa to view a list of all elves currently in the system with their assigned tasks.
-* Implemented via the `ElfListCommand` class, which iterates through the `elfList` to build a detailed string representation.
 * Uses a `StringBuilder` to efficiently format the output, ensuring a clear hierarchical view of elves and their tasks.
 
 #### 8. View child feature (`childlist` command)
@@ -53,7 +52,6 @@ Allows Santa to view a complete, numbered list of all children currently stored 
 #### 9. System Reset feature (`reset` command)
 Allows Santa to completely wipe all data, clearing all children, elves, todos and tasks.
 * Implemented `ResetCommand` to perform a deep clean of both the `childList` and `elfList` simultaneously.
-* Added logic to reset the system's finalization status, giving Santa a blank slate for the next holiday season.
 
 ### Contributions to the UG
 * Added sections for: `elf`, `rmelf`, `editelf`, `find`,`childlist`, `elflist`, `reset`.
