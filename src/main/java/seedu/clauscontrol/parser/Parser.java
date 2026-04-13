@@ -237,7 +237,8 @@ public class Parser {
         case "prepared":
             return preparePreparedAction(arguments);
         default:
-            throw new IllegalValueException("Unknown command:( Please enter valid command. Type 'help' for a list of commands.");
+            throw new IllegalValueException("Unknown command:( Please enter valid command. " +
+                    "Type 'help' for a list of commands.");
         }
         //@@author
     }
