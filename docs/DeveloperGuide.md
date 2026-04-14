@@ -52,11 +52,11 @@ The class diagram is-
 #### Implementation
 **Saving data**
 The save() method writes the lists into a .txt file in a structured format.
-1. Each child's name is written with the CHILD tag.
-2. The corresponding gifts of the child are written just below it with the GIFT tag.
-3. The child's actions and severities are stores with the ACTION tag.
-4. Each elf is written with the ELF tag.
-5. The corresponding elf tasks are written under it with the TASK tag.
+1. Each child's name,location,age and naught/nice assignment is stored with the CHILD tag.
+2. The corresponding gifts of the child are stored with the GIFT tag.
+3. The child's actions and severities are stored with the ACTION tag.
+4. Each elf is stored with the ELF tag.
+5. The corresponding elf tasks are stored with the TASK tag.
 
 **Loading data**
 The load() method reconstructs data from the .txt file.
@@ -304,6 +304,19 @@ Given below is a sequence diagram showing how the finalize command works.
     - **Pros:** Single source of truth
     - **Cons:** Less readable, harder to reason about state changes
 
+### Unfinalize Feature
+
+#### Overview
+The `unfinalize` command reverses a prior finalize, re-enabling action additions
+and reassignments. Gift operations are blocked again until the lists are finalized.
+
+#### Implementation
+`UnfinalizeCommand.execute()` checks `isFinalized`. If false, it returns an error.
+Otherwise it returns a success message. `ClausControl` detects it via
+`instanceof UnfinalizeCommand && isFinalized` and sets the flag to `false`.
+
+Format: `unfinalize` or `unfinalise`
+
 ### Action Tracking Feature
 
 #### Overview
@@ -330,11 +343,21 @@ if the child is on the nice (score >= 0) or naughty (score < 0) list.
 
 The following steps occur when adding an action:
 1. Parser extracts the child index, action description and severity.
-2. `ActionCommand` checks if the lists are finalised. If so, the action is blocked.
-3. The child index is validated against the child list bounds.
-4. The action and severity are added to the child via `addAction()`.
+2. `Parser` validates that the action description is not empty.
+3. `ActionCommand` checks if the lists are finalised. If so, the action is blocked.
+4. The child index is validated against the child list bounds.
+5. The action and severity are added to the child via `addAction()`.
 
 Format: `action CHILD_INDEX a/ACTION s/SEVERITY`
+
+The following steps occur when editing an action:
+1. Parser extracts the child index, action index, and optional new description and/or severity.
+2. `EditActionCommand` checks if the lists are finalised. If so, the edit is blocked.
+3. The child and action indices are validated against their respective list bounds.
+4. The description and/or severity at the given index are updated in-place via `set()` on the `ArrayList`.
+5. A success message reflecting the updated values is returned.
+
+Format: `editaction CHILD_INDEX ACTION_INDEX [a/NEW_DESCRIPTION] [s/NEW_SEVERITY]`
 
 Given below is a sequence diagram showing how the action command works.
 
@@ -357,6 +380,24 @@ Given below is a sequence diagram showing how the action command works.
 - **Alternative 2:** Validate inside `ActionCommand.execute()`
     - **Pros:** Keeps parser simpler
     - **Cons:** Invalid command objects can be created and partially executed
+
+**Aspect:** How to handle severity 0
+- **Alternative 1 (current choice):** Allow severity 0 but display a warning in the success message
+    - **Pros:** Does not block valid (if unusual) input; informs the user without rejecting their command
+    - **Cons:** Adds a code branch in execute() for a minor edge case
+
+- **Alternative 2:** Reject severity 0 as invalid input
+    - **Pros:** Prevents meaningless data entry
+    - **Cons:** Overly strict; 0 is within the documented range and blocking it would surprise users
+
+**Aspect:** How to implement action editing
+- **Alternative 1 (current choice):** Edit in-place via `ArrayList.set()` on the existing parallel lists
+    - **Pros:** No new data structures needed; consistent with the existing parallel-list design
+    - **Cons:** Still tied to the parallel-list approach; both lists must remain in sync
+
+- **Alternative 2:** Remove the old action and insert a new one at the same index
+    - **Pros:** Reuses existing `addAction()` logic
+    - **Cons:** More steps; index management is error-prone during remove-then-insert
 
 ### Nice and Naughty List Feature
 
@@ -464,8 +505,11 @@ and loads todos from `todos.txt` using a pipe-separated format.
 The following steps occur when adding a todo:
 1. Parser extracts the description and deadline from the input.
 2. `AddTodoCommand` validates that the description is not empty.
-3. `AddTodoCommand` validates that the deadline is not in the past.
-4. The todo is added to `todoList` and saved via `TodoStorage`.
+3. `AddTodoCommand` validates that the deadline format matches `YYYY-MM-DD`.
+4. `AddTodoCommand` validates that the date value actually exists.
+5. `AddTodoCommand` validates that the deadline is not in the past.
+6. `AddTodoCommand` checks for an exact duplicate (same description and deadline).
+7. The todo is added to `todoList` and saved via `TodoStorage`.
 
 On startup, `ClausControl` calls `showUpcomingTodos()` which filters todos
 using `isUpcoming()`, showing only those due within 7 days.
@@ -493,6 +537,8 @@ Given below is a sequence diagram showing how the todo command works.
 - **Alternative 2:** Store todos in the same `data.txt` file
     - **Pros:** Single file for all data
     - **Cons:** Couples todo storage to the existing format; increases risk of breaking existing storage logic
+
+
 
 ### Elf Feature 
 
@@ -833,7 +879,7 @@ This feature allows Santa to remove a gift for a particular child. This is usefu
 
 #### Use Case
 **Santa removes a gift using the gift index for a particular child index.**
-**Only gifts assigned as prepared/undelivered can be degifted.**
+**Only a gift assigned as prepared/undelivered can be degifted.**
 1. degift 1 1
 The command removes the first gift of the first child.
 
@@ -876,7 +922,7 @@ updating the delivery status.
 #### Use Case
 Santa assigns the delivery status of the gift with the child index and gift index.
 **Santa can assign a gift as delivered or undelivered.**
-**Gifts are assigned undelivered by default.**
+**A gift is assigned undelivered by default.**
 1. delivery_status 1 1 d/delivered
 2. delivery_status 1 3 d/undelivered
 
@@ -913,8 +959,9 @@ Given below is the sequence diagram which describes the happy path.
 ### Prepare Gift Feature
 
 #### Overview
-This feature allows Santa to set a gift status as prepared. This is to indicate that the gift is prepared and not delivered yet.
-This allows Santa to track the progress of gifts.
+This feature allows Santa to set a gift status as prepared.
+This is to indicate that the gift is prepared and not delivered yet.
+This feature allows Santa to track the progress of gifts.
 
 #### Use Case
 **Santa can assign a gift as prepared for a gift with the corresponding child index and gift index**
@@ -956,7 +1003,9 @@ Given below is the sequence diagram
 The giftlist feature displays all the gifts assigned to a child along with the child name. This allows Santa to view all the gifts in a structured format.
 
 #### Use Case
-**Santa can view the gifts for each child. Only children with gifts assigned are displayed in the list along with their gifts.**
+Santa can view the gifts for each child.
+
+**Only children with gifts assigned are displayed in the list along with their gifts.**
 1. giftlist
 
 #### Implementation
@@ -984,6 +1033,16 @@ Given below is the sequence diagram.
     - **Pros:** Provides a complete overview of all children details.
     - **Cons:** Output may look messy.
 
+### Help Feature
+
+#### Overview
+The `help` command displays a formatted list of all available commands grouped
+by category, including their formats and a brief description of each.
+
+#### Implementation
+`HelpCommand.execute()` returns a static `HELP_TEXT` string constant defined
+within the class. No data access is required. The Parser routes the `help`
+keyword directly to a new `HelpCommand` instance.
 
 ## Documentation, logging, testing, configuration, dev-ops
 
@@ -1228,6 +1287,21 @@ Given below are instructions to test the app manually.
 6. Reassign: `reassign 1 l/nice`
 
    Expected: Child moved to nice list regardless of score.
+7. Empty action description: `action 1 a/ s/2`
+
+    Expected: Error - action description cannot be empty.
+
+8. Edit action description: `editaction 1 1 a/helped neighbour`
+
+   Expected: First action's description updated.
+
+9. Edit action severity: `editaction 1 1 s/4`
+
+   Expected: First action's severity updated.
+
+10. Edit action after finalize: `editaction 1 1 a/test`
+
+    Expected: Blocked with error message.
 
 ### Testing finalize and gift commands
 1. Try adding a gift before finalize: `gift 1 g/toy`
@@ -1254,7 +1328,7 @@ Given below are instructions to test the app manually.
 6. Mark gift as undelivered: `delivery_status 1 1 d/undelivered`
 
    Expected: Gift status updated to Undelivered.
-8. Remove gift: `degift 1 1` then `confirm`
+8. Remove gift: `degift 1 1` then `confirm` (Only a gift assigned as undelivered/prepared can be degifted)
 
    Expected: Gift removed.
 
@@ -1300,6 +1374,13 @@ Given below are instructions to test the app manually.
 6. Restart the app with a todo due within 7 days.
 
    Expected: Reminder shown on startup automatically.
+7. Non-existent date: `todo d/Test by/2026-02-30`
+
+    Expected: Error: date value does not exist.
+
+8. Duplicate todo: run `todo d/Buy wrapping paper by/2026-12-20` twice.
+
+   Expected: Second entry rejected with duplicate message.
 
 ### Testing reset command
 1. Add some children and elves.
@@ -1311,3 +1392,15 @@ Given below are instructions to test the app manually.
 1. Add some children and todos, then type `bye` to exit.
 2. Relaunch the app.
 3. Expected: Children and todos are restored.
+
+### Testing help command
+1. Enter: `help`
+
+   Expected: Full command list displayed grouped by category.
+
+### Testing unfinalize command
+1. `finalize` — Expected: Lists frozen.
+2. `unfinalize` — Expected: Lists unfrozen, actions and reassignments re-enabled.
+3. Try `action 1 a/test s/1` after unfinalize — Expected: Action accepted.
+4. `unfinalize` when not finalized — Expected: Error message.
+
