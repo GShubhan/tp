@@ -468,7 +468,7 @@ public class Parser {
      * Parses the index of the child to view.
      *
      * @param args the input arguments
-     * @return an {@link EditCommand} initialized with the parsed index
+     * @return a {@link ViewCommand} initialized with the parsed index
      * @throws IllegalValueException if input format or index is invalid,
      *                               or index is missing
      */
@@ -486,7 +486,7 @@ public class Parser {
      * Parses the index of the child to view.
      *
      * @param args the input arguments
-     * @return an {@link EditCommand} initialized with the parsed index
+     * @return a {@link DeleteCommand} initialized with the parsed index
      * @throws IllegalValueException if input format or index is invalid,
      *                               or index is missing
      */
