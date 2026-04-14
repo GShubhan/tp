@@ -241,6 +241,9 @@ public class Parser {
         case "delivery_status":
             return prepareDeliverAction(arguments);
         case "giftlist":
+            if(!arguments.trim().isEmpty()){
+                throw new IllegalValueException("Invalid format, please follow the format: giftlist");
+            }
             return new GiftListCommand();
         case "prepared":
             return preparePreparedAction(arguments);
@@ -468,7 +471,7 @@ public class Parser {
      * Parses the index of the child to view.
      *
      * @param args the input arguments
-     * @return an {@link EditCommand} initialized with the parsed index
+     * @return a {@link ViewCommand} initialized with the parsed index
      * @throws IllegalValueException if input format or index is invalid,
      *                               or index is missing
      */
@@ -486,7 +489,7 @@ public class Parser {
      * Parses the index of the child to view.
      *
      * @param args the input arguments
-     * @return an {@link EditCommand} initialized with the parsed index
+     * @return a {@link DeleteCommand} initialized with the parsed index
      * @throws IllegalValueException if input format or index is invalid,
      *                               or index is missing
      */
@@ -789,13 +792,11 @@ public class Parser {
     
     private Command prepareElf(String args) throws IllegalValueException {
         String name = null;
-        String[] tokens = args.split(" ");
-
-        for (String token : tokens) {
-            if (token.startsWith("n/")) {
-                name = token.substring(2);
-                hasNoPipe(name);
-            }
+        if (args.startsWith("n/")) {
+            name = args.substring(2);
+        }
+        else{
+            throw new IllegalValueException("Please use correct format: elf n/NAME");
         }
 
         if (name == null || name.isEmpty()) {
